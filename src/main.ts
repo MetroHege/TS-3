@@ -1,5 +1,6 @@
 import {errorModal, restaurantModal, restaurantRow} from './components';
 import {fetchData} from './functions';
+import { DailyMenu } from './interfaces/Menu';
 import { Restaurant, Restaurants } from './interfaces/Restaurant';
 import {apiUrl, positionOptions} from './variables';
 
@@ -34,7 +35,7 @@ const createTable = (restaurants: Restaurants) => {
         modal.innerHTML = '';
 
         // fetch menu
-        const menu = await fetchData(
+        const menu = await fetchData<DailyMenu>(
           apiUrl + `/restaurants/daily/${restaurant._id}/fi`
         );
         console.log(menu);
@@ -58,7 +59,7 @@ const error = (err: GeolocationPositionError) => {
 const success = async (pos: GeolocationPosition) => {
   try {
     const crd = pos.coords;
-    const restaurants: Restaurants = await fetchData(apiUrl + '/restaurants');
+    const restaurants = await fetchData<Restaurants>(apiUrl + '/restaurants');
     console.log(restaurants);
     restaurants.sort((a, b) => {
       const x1 = crd.latitude;
